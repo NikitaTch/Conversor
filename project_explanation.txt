@@ -1,0 +1,50 @@
+====================================================================
+PROJECT EXPLANATION: MULTI-CONVERTER ANDROID APPLICATION
+====================================================================
+
+1. PROJECT OVERVIEW
+--------------------------------------------------------------------
+The Multi-Converter application is an Android app developed in Kotlin that allows users to convert values between different units across various measurement categories (Distance, Temperature, Volume, Mass and Weight, Time, Digital Information, Currency, Area, Speed, and Pressure).
+
+The application is structured into two main activities:
+- Activity 1 (MainActivity): Conversion Category Selection and Bitmap Image display.
+- Activity 2 (ConversionActivity): Unit Conversion and calculation.
+
+
+2. ARCHITECTURE & CORE COMPONENTS
+--------------------------------------------------------------------
+
+A. Activity 1: Conversion Category Selection (MainActivity.kt)
+- Purpose: Allows users to choose a conversion category from a Spinner.
+- Bitmap Requirement: Dynamically loads and manages category images as Android `Bitmap` objects using `ContextCompat`, `Bitmap.createBitmap()`, and `Canvas` to support both vector and bitmap drawables safely.
+- Navigation: Passes the selected category string to the second activity using an `Intent`.
+
+B. Activity 2: Unit Conversion (ConversionActivity.kt)
+- Purpose: Receives the selected category, displays available units in source and target Spinners, accepts numeric input, performs conversion, and displays the result.
+- Validation & Feedback: Validates user input (empty or non-numeric values) and displays clear messages using Material Design `Snackbar` (strictly no `Toast` used).
+
+C. Conversion Logic Engine (ConversionLogic.kt)
+- Generic System: Implements a factor-based conversion model using maps/lists where units are converted relative to a common reference base unit for each category (e.g., metres for distance, grams for mass, litres for volume, etc.).
+- Temperature Strategy: Implements a dedicated scaling and offset conversion strategy for Celsius, Fahrenheit, and Kelvin since they do not share the same zero point.
+
+
+3. USER INTERFACE & LAYOUTS (XML)
+--------------------------------------------------------------------
+- activity_main.xml: Contains a CoordinatorLayout, category Spinner, ImageView displaying the category Bitmap, and a "Proceed to Conversion" Button.
+- activity_conversion.xml: Contains a CoordinatorLayout, ScrollView, category Title TextView, EditText for input, Source and Target Spinners, Convert Button, Result TextView, and a Back Button.
+- Themes & Styling: Uses Material3 DayNight NoActionBar theme (`Theme.Conversor`).
+
+
+4. GIT WORKFLOW & TEAM COLLABORATION
+--------------------------------------------------------------------
+The project was developed following a multi-member Git branching strategy:
+- `master` / `final`: Main integration branches.
+- `member1-ui-bitmap`: Branch dedicated to Activity 1 UI, Spinner setup, and Bitmap image management.
+- `member2-conversion-logic`: Branch dedicated to Activity 2 UI, conversion formulas, and Snackbar user feedback.
+- Both branches were successfully merged into the `final` release branch.
+
+
+5. DELIVERABLES
+--------------------------------------------------------------------
+- APK Path: app/build/outputs/apk/debug/app-debug.apk
+- Source Code: Located in app/src/main/java/com/example/conversor/
