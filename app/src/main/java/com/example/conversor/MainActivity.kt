@@ -2,7 +2,8 @@ package com.example.conversor
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -12,6 +13,7 @@ import android.widget.ImageView
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -82,8 +84,20 @@ class MainActivity : AppCompatActivity() {
             else -> R.drawable.cat_distance
         }
 
-        // Using Bitmap class to load, manage, and display the image
-        val bitmap: Bitmap = BitmapFactory.decodeResource(resources, drawableRes)
+        // Using Bitmap class and Canvas to load, manage, and display vector/bitmap drawables safely
+        val drawable = ContextCompat.getDrawable(this, drawableRes)
+        val bitmap: Bitmap = if (drawable is BitmapDrawable) {
+            drawable.bitmap
+        } else {
+            val width = if (drawable != null && drawable.intrinsicWidth > 0) drawable.intrinsicWidth else 300
+            val height = if (drawable != null && drawable.intrinsicHeight > 0) drawable.intrinsicHeight else 300
+            val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bmp)
+            drawable?.setBounds(0, 0, canvas.width, canvas.height)
+            drawable?.draw(canvas)
+            bmp
+        }
+
         imageViewCategory.setImageBitmap(bitmap)
     }
 }
